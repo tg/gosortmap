@@ -28,10 +28,11 @@ type flatmap struct {
 }
 
 func newFlatMap(m interface{}, c Less) *flatmap {
-	fm := &flatmap{c: c}
 	mv := reflect.ValueOf(m)
-	for _, v := range mv.MapKeys() {
-		fm.kv = append(fm.kv, KV{v.Interface(), mv.MapIndex(v).Interface()})
+	keys := mv.MapKeys()
+	fm := &flatmap{kv: make([]KV, len(keys)), c: c}
+	for n := range keys {
+		fm.kv[n] = KV{keys[n].Interface(), mv.MapIndex(keys[n]).Interface()}
 	}
 	return fm
 }
