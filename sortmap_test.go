@@ -2,6 +2,8 @@ package sortmap_test
 
 import (
 	"fmt"
+	"math/rand"
+	"testing"
 
 	"github.com/tg/gosortmap"
 )
@@ -52,4 +54,30 @@ func ExampleByValDesc() {
 	// cabbage: 3
 	// daikon: 2
 	// banana: 1
+}
+
+var benchMap = func() map[int]int {
+	m := make(map[int]int)
+	for n := 0; n < 10000; n++ {
+		m[rand.Int()] = rand.Int()
+	}
+	return m
+}()
+
+func BenchmarkSortNone(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		sortmap.ByFunc(benchMap, func(x, y sortmap.KV) bool { return false })
+	}
+}
+
+func BenchmarkSortFunc(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		sortmap.ByFunc(benchMap, func(x, y sortmap.KV) bool { return x.K.(int) < y.K.(int) })
+	}
+}
+
+func BenchmarkSortKey(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		sortmap.ByKey(benchMap)
+	}
 }
