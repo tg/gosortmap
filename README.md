@@ -1,4 +1,4 @@
-# gosortmap [![GoDoc](https://godoc.org/github.com/tg/gosortmap?status.svg)](https://godoc.org/github.com/tg/gosortmap)
+# gosortmap [![GoDoc](https://godoc.org/github.com/tg/gosortmap?status.svg)](https://godoc.org/github.com/tg/gosortmap) [![Build Status](https://travis-ci.org/tg/gosortmap.svg?branch=master)](https://travis-ci.org/tg/gosortmap)
 Get your maps sorted by keys, values or a custom comparator.
 ## Example
 ```go
