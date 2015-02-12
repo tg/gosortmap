@@ -1,27 +1,55 @@
-package sortmap
+package sortmap_test
 
-import "fmt"
+import (
+	"fmt"
 
-func ExampleSortValInt() {
-	m := map[string]int{"b": 2, "c": 3, "a": 1, "d": 4}
-	for _, x := range SortValInt(m) {
+	"github.com/tg/gosortmap"
+)
+
+func ExampleByKey() {
+	m := map[string]int{"daikon": 2, "cabbage": 3, "banana": 1, "apple": 4}
+	for _, x := range sortmap.ByKey(m) {
 		fmt.Printf("%v: %v\n", x.K, x.V)
 	}
 	// Output:
-	// a: 1
-	// b: 2
-	// c: 3
-	// d: 4
+	// apple: 4
+	// banana: 1
+	// cabbage: 3
+	// daikon: 2
 }
 
-func ExampleSortValIntDesc() {
-	m := map[string]int{"b": 2, "c": 3, "a": 1, "d": 4}
-	for _, x := range SortValIntDesc(m) {
+func ExampleByKeyDesc() {
+	m := map[string]int{"daikon": 2, "cabbage": 3, "banana": 1, "apple": 4}
+	for _, x := range sortmap.ByKeyDesc(m) {
 		fmt.Printf("%v: %v\n", x.K, x.V)
 	}
 	// Output:
-	// d: 4
-	// c: 3
-	// b: 2
-	// a: 1
+	// daikon: 2
+	// cabbage: 3
+	// banana: 1
+	// apple: 4
+}
+
+func ExampleByVal() {
+	m := map[string]int{"daikon": 2, "cabbage": 3, "banana": 1, "apple": 4}
+	for _, x := range sortmap.ByVal(m) {
+		fmt.Printf("%v: %v\n", x.K, x.V)
+	}
+	// Output:
+	// banana: 1
+	// daikon: 2
+	// cabbage: 3
+	// apple: 4
+}
+
+func ExampleByValDesc() {
+	m := map[string]int{"daikon": 2, "cabbage": 3, "banana": 1, "apple": 4}
+	for _, x := range sortmap.ByValDesc(m) {
+		fmt.Printf("%v: %v\n", x.K, x.V)
+	}
+	// Output:
+	// apple: 4
+	// cabbage: 3
+	// daikon: 2
+	// banana: 1
 }
