@@ -37,13 +37,13 @@ func newFlatMap(m interface{}, c Less) *flatmap {
 	return fm
 }
 
-func (m flatmap) Len() int {
+func (m *flatmap) Len() int {
 	return len(m.kv)
 }
-func (m flatmap) Less(i, j int) bool {
+func (m *flatmap) Less(i, j int) bool {
 	return m.c(m.kv[i], m.kv[j])
 }
-func (m flatmap) Swap(i, j int) {
+func (m *flatmap) Swap(i, j int) {
 	m.kv[i], m.kv[j] = m.kv[j], m.kv[i]
 }
 
