@@ -3,6 +3,7 @@ package sortmap_test
 import (
 	"fmt"
 	"math/rand"
+	"sort"
 	"testing"
 
 	"github.com/tg/gosortmap"
@@ -64,7 +65,54 @@ var benchMap = func() map[int]int {
 	return m
 }()
 
-func BenchmarkSortNone(b *testing.B) {
+type kv struct{ k, v int }
+type kvs []kv
+
+func (m kvs) Len() int           { return len(m) }
+func (m kvs) Less(i, j int) bool { return m[i].k < m[j].k }
+func (m kvs) Swap(i, j int)      { m[i], m[j] = m[j], m[i] }
+
+type kvs_nosort []kv
+
+func (m kvs_nosort) Len() int           { return len(m) }
+func (m kvs_nosort) Less(i, j int) bool { return false }
+func (m kvs_nosort) Swap(i, j int)      { m[i], m[j] = m[j], m[i] }
+
+func BenchmarkManualSorted(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		m := make(kvs_nosort, 0, len(benchMap))
+		for k, v := range benchMap {
+			m = append(m, kv{k, v})
+		}
+		sort.Sort(m)
+	}
+}
+
+func BenchmarkManualFunc(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		m := make(kvs, 0, len(benchMap))
+		for k, v := range benchMap {
+			m = append(m, kv{k, v})
+		}
+		sort.Sort(m)
+	}
+}
+
+func BenchmarkManualKey(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		keys := make([]int, 0, len(benchMap))
+		for k, _ := range benchMap {
+			keys = append(keys, k)
+		}
+		sort.Ints(keys)
+		values := make([]int, len(keys))
+		for n := range keys {
+			values[n] = benchMap[keys[n]]
+		}
+	}
+}
+
+func BenchmarkSortSorted(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		sortmap.ByFunc(benchMap, func(x, y sortmap.KV) bool { return false })
 	}
