@@ -15,7 +15,7 @@ import (
 
 // KV is a key-value pair representing element in the map
 type KV struct {
-	K, V interface{}
+	Key, Value interface{}
 }
 
 // Less compares two map elements and returns true if x < y
@@ -57,25 +57,25 @@ func ByFunc(m interface{}, c Less) []KV {
 // ByKey sorts map by keys in the ascending order
 func ByKey(m interface{}) []KV {
 	ls := getLess(reflect.ValueOf(m).Type().Key())
-	return ByFunc(m, func(x, y KV) bool { return ls(x.K, y.K) })
+	return ByFunc(m, func(x, y KV) bool { return ls(x.Key, y.Key) })
 }
 
 // ByKeyDesc sorts map by keys in the descending order
 func ByKeyDesc(m interface{}) []KV {
 	ls := getLess(reflect.ValueOf(m).Type().Key())
-	return ByFunc(m, func(x, y KV) bool { return ls(y.K, x.K) })
+	return ByFunc(m, func(x, y KV) bool { return ls(y.Key, x.Key) })
 }
 
-// ByVal sorts map by values in the ascending order
-func ByVal(m interface{}) []KV {
+// ByValue sorts map by values in the ascending order
+func ByValue(m interface{}) []KV {
 	ls := getLess(reflect.ValueOf(m).Type().Elem())
-	return ByFunc(m, func(x, y KV) bool { return ls(x.V, y.V) })
+	return ByFunc(m, func(x, y KV) bool { return ls(x.Value, y.Value) })
 }
 
-// ByValDesc sorts map by values in the descending order
-func ByValDesc(m interface{}) []KV {
+// ByValueDesc sorts map by values in the descending order
+func ByValueDesc(m interface{}) []KV {
 	ls := getLess(reflect.ValueOf(m).Type().Elem())
-	return ByFunc(m, func(x, y KV) bool { return ls(y.V, x.V) })
+	return ByFunc(m, func(x, y KV) bool { return ls(y.Value, x.Value) })
 }
 
 // getLess returns default comparator for a type

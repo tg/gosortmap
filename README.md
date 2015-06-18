@@ -3,8 +3,8 @@ Get your maps sorted by keys, values or a custom comparator.
 ## Example
 ```go
 m := map[string]int{"daikon": 2, "cabbage": 3, "banana": 1, "apple": 4}
-for _, e := range sortmap.ByValDesc(m) {
-	fmt.Printf("%s: %d\n", e.K, e.V)
+for _, e := range sortmap.ByValueDesc(m) {
+	fmt.Printf("%s: %d\n", e.Key, e.Value)
 }
 // Output:
 // apple: 4

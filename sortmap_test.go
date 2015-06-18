@@ -12,7 +12,7 @@ import (
 func ExampleByKey() {
 	m := map[string]int{"daikon": 2, "cabbage": 3, "banana": 1, "apple": 4}
 	for _, e := range sortmap.ByKey(m) {
-		fmt.Printf("%s: %d\n", e.K, e.V)
+		fmt.Printf("%s: %d\n", e.Key, e.Value)
 	}
 	// Output:
 	// apple: 4
@@ -24,7 +24,7 @@ func ExampleByKey() {
 func ExampleByKeyDesc() {
 	m := map[string]int{"daikon": 2, "cabbage": 3, "banana": 1, "apple": 4}
 	for _, e := range sortmap.ByKeyDesc(m) {
-		fmt.Printf("%s: %d\n", e.K, e.V)
+		fmt.Printf("%s: %d\n", e.Key, e.Value)
 	}
 	// Output:
 	// daikon: 2
@@ -33,10 +33,10 @@ func ExampleByKeyDesc() {
 	// apple: 4
 }
 
-func ExampleByVal() {
+func ExampleByValue() {
 	m := map[string]int{"daikon": 2, "cabbage": 3, "banana": 1, "apple": 4}
-	for _, e := range sortmap.ByVal(m) {
-		fmt.Printf("%s: %d\n", e.K, e.V)
+	for _, e := range sortmap.ByValue(m) {
+		fmt.Printf("%s: %d\n", e.Key, e.Value)
 	}
 	// Output:
 	// banana: 1
@@ -45,10 +45,10 @@ func ExampleByVal() {
 	// apple: 4
 }
 
-func ExampleByValDesc() {
+func ExampleByValueDesc() {
 	m := map[string]int{"daikon": 2, "cabbage": 3, "banana": 1, "apple": 4}
-	for _, e := range sortmap.ByValDesc(m) {
-		fmt.Printf("%s: %d\n", e.K, e.V)
+	for _, e := range sortmap.ByValueDesc(m) {
+		fmt.Printf("%s: %d\n", e.Key, e.Value)
 	}
 	// Output:
 	// apple: 4
@@ -120,7 +120,7 @@ func BenchmarkSortSorted(b *testing.B) {
 
 func BenchmarkSortFunc(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		sortmap.ByFunc(benchMap, func(x, y sortmap.KV) bool { return x.K.(int) < y.K.(int) })
+		sortmap.ByFunc(benchMap, func(x, y sortmap.KV) bool { return x.Key.(int) < y.Key.(int) })
 	}
 }
 
