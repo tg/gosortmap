@@ -12,49 +12,49 @@ import (
 func ExampleByKey() {
 	m := map[string]int{"daikon": 2, "cabbage": 3, "banana": 1, "apple": 4}
 	for _, e := range sortmap.ByKey(m) {
-		fmt.Printf("%s: %d\n", e.Key, e.Value)
+		fmt.Printf("%s\t%d\n", e.Key, e.Value)
 	}
 	// Output:
-	// apple: 4
-	// banana: 1
-	// cabbage: 3
-	// daikon: 2
+	// apple	4
+	// banana	1
+	// cabbage	3
+	// daikon	2
 }
 
 func ExampleByKeyDesc() {
 	m := map[string]int{"daikon": 2, "cabbage": 3, "banana": 1, "apple": 4}
 	for _, e := range sortmap.ByKeyDesc(m) {
-		fmt.Printf("%s: %d\n", e.Key, e.Value)
+		fmt.Printf("%s\t%d\n", e.Key, e.Value)
 	}
 	// Output:
-	// daikon: 2
-	// cabbage: 3
-	// banana: 1
-	// apple: 4
+	// daikon	2
+	// cabbage	3
+	// banana	1
+	// apple	4
 }
 
 func ExampleByValue() {
 	m := map[string]int{"daikon": 2, "cabbage": 3, "banana": 1, "apple": 4}
 	for _, e := range sortmap.ByValue(m) {
-		fmt.Printf("%s: %d\n", e.Key, e.Value)
+		fmt.Printf("%s\t%d\n", e.Key, e.Value)
 	}
 	// Output:
-	// banana: 1
-	// daikon: 2
-	// cabbage: 3
-	// apple: 4
+	// banana	1
+	// daikon	2
+	// cabbage	3
+	// apple	4
 }
 
 func ExampleByValueDesc() {
 	m := map[string]int{"daikon": 2, "cabbage": 3, "banana": 1, "apple": 4}
 	for _, e := range sortmap.ByValueDesc(m) {
-		fmt.Printf("%s: %d\n", e.Key, e.Value)
+		fmt.Printf("%s\t%d\n", e.Key, e.Value)
 	}
 	// Output:
-	// apple: 4
-	// cabbage: 3
-	// daikon: 2
-	// banana: 1
+	// apple	4
+	// cabbage	3
+	// daikon	2
+	// banana	1
 }
 
 var benchMap = func() map[int]int {

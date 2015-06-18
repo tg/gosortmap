@@ -4,13 +4,13 @@ Get your maps sorted by keys, values or a custom comparator.
 ```go
 m := map[string]int{"daikon": 2, "cabbage": 3, "banana": 1, "apple": 4}
 for _, e := range sortmap.ByValueDesc(m) {
-	fmt.Printf("%s: %d\n", e.Key, e.Value)
+	fmt.Printf("%s\t%d\n", e.Key, e.Value)
 }
 // Output:
-// apple: 4
-// cabbage: 3
-// daikon: 2
-// banana: 1
+// apple	4
+// cabbage	3
+// daikon	2
+// banana	1
 ```
 ## Benchmark
 This package favors convenience over the speed, so if the latter is preferable,
