@@ -1,16 +1,21 @@
 # gosortmap [![GoDoc](https://godoc.org/github.com/tg/gosortmap?status.svg)](https://godoc.org/github.com/tg/gosortmap) [![Build Status](https://travis-ci.org/tg/gosortmap.svg?branch=master)](https://travis-ci.org/tg/gosortmap)
-Get your maps sorted by keys, values or a custom comparator.
+Sort maps in Go by keys or values. Works with most built-in types; own comparator can
+be provided to support custom types and ordering.
 ## Example
 ```go
 m := map[string]int{"daikon": 2, "cabbage": 3, "banana": 1, "apple": 4}
-for _, e := range sortmap.ByValueDesc(m) {
+for _, e := range sortmap.ByValue(m) {
 	fmt.Printf("%s\t%d\n", e.Key, e.Value)
 }
 // Output:
-// apple	4
-// cabbage	3
-// daikon	2
 // banana	1
+// daikon	2
+// cabbage	3
+// apple	4
+
+fmt.Println(sortmap.ByValueDesc(m).Top(2))
+// Output:
+// [{apple 4} {cabbage 3}]
 ```
 ## Benchmark
 This package favors convenience over the speed, so if the latter is preferable,
