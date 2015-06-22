@@ -57,6 +57,13 @@ func ExampleByValueDesc() {
 	// banana	1
 }
 
+func ExampleTopElements() {
+	m := map[string]int{"daikon": 2, "cabbage": 3, "banana": 1, "apple": 4}
+	fmt.Println(sortmap.ByValueDesc(m).Top(2))
+	// Output:
+	// [{apple 4} {cabbage 3}]
+}
+
 var benchMap = func() map[int]int {
 	m := make(map[int]int)
 	for n := 0; n < 10000; n++ {
@@ -114,13 +121,13 @@ func BenchmarkManualKey(b *testing.B) {
 
 func BenchmarkSortSorted(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		sortmap.ByFunc(benchMap, func(x, y sortmap.KV) bool { return false })
+		sortmap.ByFunc(benchMap, func(x, y sortmap.Item) bool { return false })
 	}
 }
 
 func BenchmarkSortFunc(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		sortmap.ByFunc(benchMap, func(x, y sortmap.KV) bool { return x.Key.(int) < y.Key.(int) })
+		sortmap.ByFunc(benchMap, func(x, y sortmap.Item) bool { return x.Key.(int) < y.Key.(int) })
 	}
 }
 

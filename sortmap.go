@@ -1,7 +1,7 @@
 // Package sortmap allows for sorting maps by a custom comparator.
 // For convenience, functions sorting by keys or values in ascending or descending
 // order are provided – these can deal with limited types only, which are:
-// bool, all inbuilt numerical types and string.
+// bool, all built-in numerical types and string.
 //
 // Functions provided by this package panic when non-map type is passed for sorting
 // or, in case of the key/value sorters, the underyling type is not supported.
@@ -13,69 +13,80 @@ import (
 	"sort"
 )
 
-// KV is a key-value pair representing element in the map
-type KV struct {
+// Item is a key-value pair representing element in the map
+type Item struct {
 	Key, Value interface{}
 }
 
 // Less compares two map elements and returns true if x < y
-type Less func(x, y KV) bool
+type Less func(x, y Item) bool
 
 // flatmap is a flattened map with a comparator to be used with sort
 type flatmap struct {
-	kv []KV
-	c  Less
+	items []Item
+	less  Less
 }
 
-func newFlatMap(m interface{}, c Less) *flatmap {
+func newFlatMap(m interface{}, less Less) *flatmap {
 	mv := reflect.ValueOf(m)
 	keys := mv.MapKeys()
-	fm := &flatmap{kv: make([]KV, len(keys)), c: c}
+	fm := &flatmap{items: make([]Item, len(keys)), less: less}
 	for n := range keys {
-		fm.kv[n] = KV{keys[n].Interface(), mv.MapIndex(keys[n]).Interface()}
+		fm.items[n] = Item{keys[n].Interface(), mv.MapIndex(keys[n]).Interface()}
 	}
 	return fm
 }
 
 func (m *flatmap) Len() int {
-	return len(m.kv)
+	return len(m.items)
 }
 func (m *flatmap) Less(i, j int) bool {
-	return m.c(m.kv[i], m.kv[j])
+	return m.less(m.items[i], m.items[j])
 }
 func (m *flatmap) Swap(i, j int) {
-	m.kv[i], m.kv[j] = m.kv[j], m.kv[i]
+	m.items[i], m.items[j] = m.items[j], m.items[i]
+}
+
+// Items is a slice of map elements (key-value pairs)
+type Items []Item
+
+// Top returns slice of up to n leading elements
+func (r Items) Top(n int) Items {
+	if n > len(r) {
+		n = len(r)
+	}
+	return r[:n]
 }
 
 // ByFunc sorts map using a provided comparator
-func ByFunc(m interface{}, c Less) []KV {
+func ByFunc(m interface{}, c Less) Items {
 	fm := newFlatMap(m, c)
 	sort.Sort(fm)
-	return fm.kv
+	return fm.items
 }
 
 // ByKey sorts map by keys in the ascending order
-func ByKey(m interface{}) []KV {
+func ByKey(m interface{}) Items {
 	ls := getLess(reflect.ValueOf(m).Type().Key())
-	return ByFunc(m, func(x, y KV) bool { return ls(x.Key, y.Key) })
+	return ByFunc(m, func(x, y Item) bool { return ls(x.Key, y.Key) })
 }
 
 // ByKeyDesc sorts map by keys in the descending order
-func ByKeyDesc(m interface{}) []KV {
+func ByKeyDesc(m interface{}) Items {
 	ls := getLess(reflect.ValueOf(m).Type().Key())
-	return ByFunc(m, func(x, y KV) bool { return ls(y.Key, x.Key) })
+	return ByFunc(m, func(x, y Item) bool { return ls(y.Key, x.Key) })
 }
 
 // ByValue sorts map by values in the ascending order
-func ByValue(m interface{}) []KV {
+func ByValue(m interface{}) Items {
 	ls := getLess(reflect.ValueOf(m).Type().Elem())
-	return ByFunc(m, func(x, y KV) bool { return ls(x.Value, y.Value) })
+	return ByFunc(m, func(x, y Item) bool { return ls(x.Value, y.Value) })
 }
 
 // ByValueDesc sorts map by values in the descending order
-func ByValueDesc(m interface{}) []KV {
+func ByValueDesc(m interface{}) Items {
 	ls := getLess(reflect.ValueOf(m).Type().Elem())
-	return ByFunc(m, func(x, y KV) bool { return ls(y.Value, x.Value) })
+	return ByFunc(m, func(x, y Item) bool { return ls(y.Value, x.Value) })
 }
 
 // getLess returns default comparator for a type
