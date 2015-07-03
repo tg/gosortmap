@@ -1,7 +1,7 @@
 // Package sortmap allows for sorting maps by a custom comparator.
 // For convenience, functions sorting by keys or values in ascending or descending
 // order are provided – these can deal with limited types only, which are:
-// bool, all built-in numerical types and string.
+// bool, all built-in numerical types and string, time.Time.
 //
 // Functions provided by this package panic when non-map type is passed for sorting
 // or, in case of the key/value sorters, the underyling type is not supported.
@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"reflect"
 	"sort"
+	"time"
 )
 
 // Item is a key-value pair representing element in the map
@@ -120,6 +121,8 @@ func getLess(t reflect.Type) (f func(x, y interface{}) bool) {
 		f = func(x, y interface{}) bool { return x.(float64) < y.(float64) }
 	case reflect.String:
 		f = func(x, y interface{}) bool { return x.(string) < y.(string) }
+	case reflect.TypeOf(time.Time{}).Kind():
+		f = func(x, y interface{}) bool { return x.(time.Time).Before(y.(time.Time)) }
 	default:
 		panic(fmt.Sprintf("sortmap: unsupported type: %s", t))
 	}

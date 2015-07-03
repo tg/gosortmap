@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"sort"
 	"testing"
+	"time"
 
 	"github.com/tg/gosortmap"
 )
@@ -62,6 +63,25 @@ func ExampleTopElements() {
 	fmt.Println(sortmap.ByValueDesc(m).Top(2))
 	// Output:
 	// [{apple 4} {cabbage 3}]
+}
+
+func ExampleByTime() {
+	p := func(s string) time.Time {
+		t, err := time.Parse(time.Kitchen, s)
+		if err != nil {
+			panic(err)
+		}
+		return t
+	}
+	m := map[time.Time]int{p("3:04PM"): 4, p("6:48AM"): 2, p("1:10PM"): 3, p("1:10AM"): 1}
+	for _, e := range sortmap.ByKey(m) {
+		fmt.Printf("%s\t%d\n", e.Key.(time.Time).Format(time.Kitchen), e.Value)
+	}
+	// Output:
+	// 1:10AM	1
+	// 6:48AM	2
+	// 1:10PM	3
+	// 3:04PM	4
 }
 
 var benchMap = func() map[int]int {
