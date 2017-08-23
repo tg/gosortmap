@@ -1,4 +1,4 @@
-# gosortmap [![GoDoc](https://godoc.org/github.com/tg/gosortmap?status.svg)](https://godoc.org/github.com/tg/gosortmap) [![Build Status](https://travis-ci.org/tg/gosortmap.svg?branch=master)](https://travis-ci.org/tg/gosortmap)
+# gosortmap [![GoDoc](https://godoc.org/github.com/tg/gosortmap?status.svg)](https://godoc.org/github.com/tg/gosortmap) [![Build Status](https://circleci.com/gh/tg/gosortmap.png?style=shield&circle-token=:circle-token)](https://travis-ci.org/tg/gosortmap)
 Sort maps in Go by keys or values. Works with most built-in types; own comparator can
 be provided to support custom types and ordering.
 ## Example
