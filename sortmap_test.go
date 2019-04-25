@@ -99,23 +99,13 @@ func (m kvs) Len() int           { return len(m) }
 func (m kvs) Less(i, j int) bool { return m[i].k < m[j].k }
 func (m kvs) Swap(i, j int)      { m[i], m[j] = m[j], m[i] }
 
-type kvs_nosort []kv
-
-func (m kvs_nosort) Len() int           { return len(m) }
-func (m kvs_nosort) Less(i, j int) bool { return false }
-func (m kvs_nosort) Swap(i, j int)      { m[i], m[j] = m[j], m[i] }
-
-func BenchmarkManualSorted(b *testing.B) {
+func BenchmarkByFunc(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		m := make(kvs_nosort, 0, len(benchMap))
-		for k, v := range benchMap {
-			m = append(m, kv{k, v})
-		}
-		sort.Sort(m)
+		sortmap.ByFunc(benchMap, func(x, y sortmap.Item) bool { return x.Key.(int) < y.Key.(int) })
 	}
 }
 
-func BenchmarkManualFunc(b *testing.B) {
+func BenchmarkByFunc_manual(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		m := make(kvs, 0, len(benchMap))
 		for k, v := range benchMap {
@@ -125,7 +115,13 @@ func BenchmarkManualFunc(b *testing.B) {
 	}
 }
 
-func BenchmarkManualKey(b *testing.B) {
+func BenchmarkByKey(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		sortmap.ByKey(benchMap)
+	}
+}
+
+func BenchmarkByKey_manual(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		keys := make([]int, 0, len(benchMap))
 		for k, _ := range benchMap {
@@ -136,23 +132,5 @@ func BenchmarkManualKey(b *testing.B) {
 		for n := range keys {
 			values[n] = benchMap[keys[n]]
 		}
-	}
-}
-
-func BenchmarkSortSorted(b *testing.B) {
-	for n := 0; n < b.N; n++ {
-		sortmap.ByFunc(benchMap, func(x, y sortmap.Item) bool { return false })
-	}
-}
-
-func BenchmarkSortFunc(b *testing.B) {
-	for n := 0; n < b.N; n++ {
-		sortmap.ByFunc(benchMap, func(x, y sortmap.Item) bool { return x.Key.(int) < y.Key.(int) })
-	}
-}
-
-func BenchmarkSortKey(b *testing.B) {
-	for n := 0; n < b.N; n++ {
-		sortmap.ByKey(benchMap)
 	}
 }
